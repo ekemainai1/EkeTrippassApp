@@ -24,7 +24,7 @@ class AddTripHome extends StatelessWidget {
   TextEditingController destDateController = TextEditingController();
   TextEditingController departTimeController = TextEditingController();
   TextEditingController destTimeController = TextEditingController();
-
+  int bb = 2;
   final String title;
   final TextStyle textStyle = new TextStyle(color: Colors.grey, fontSize: 20.0);
   final tripType = ["Business", "Education", "Health", "Vacation"];
