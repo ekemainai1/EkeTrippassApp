@@ -287,4 +287,5 @@ class AddTripHome extends StatelessWidget {
       _handTextSubmitted();
     }
   }
+  // my app
 }
