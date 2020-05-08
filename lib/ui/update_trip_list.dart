@@ -72,42 +72,52 @@ class UpdateTripHome extends StatelessWidget {
         return FutureBuilder(
             future: trip.loadTripType(),
             builder: (BuildContext context, AsyncSnapshot tripSnapshot) {
+
               return Stack(fit: StackFit.loose, children: <Widget>[
-                Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      _buildTextDeparture(),
-                      _buildTextDepDate(),
-                      _buildTextDest(),
-                      _buildTextDestDate(),
-                      _buildDropDownMenu(trip),
-                      RaisedButton(
-                        child: new Container(
-                          alignment: Alignment.center,
-                          height: 50.0,
-                          decoration: new BoxDecoration(
-                            color: Colors.blueAccent,
-                            border:
-                                new Border.all(color: Colors.white, width: 0.0),
-                            borderRadius: new BorderRadius.circular(10.0),
-                          ),
-                          child: new Center(
-                            child: new Text(
-                              'Update Trip',
-                              style: new TextStyle(
-                                  fontSize: 18.0, color: Colors.white),
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: <
+                    Widget>[
+                  _buildTextDeparture(),
+                  _buildTextDepDate(),
+                  _buildTextDest(),
+                  _buildTextDestDate(),
+                  _buildDropDownMenu(trip),
+                  Consumer<TripSharedNotifier>(
+                      builder: (context, upModel, child) {
+                    return FutureBuilder(
+                      future: upModel.loadDeleteId(),
+                      builder: (BuildContext context, AsyncSnapshot tripSnap) {
+                        if (tripSnap.hasData) {
+                          return RaisedButton(
+                            child: new Container(
+                              alignment: Alignment.center,
+                              height: 50.0,
+                              decoration: new BoxDecoration(
+                                color: Colors.blueAccent,
+                                border: new Border.all(
+                                    color: Colors.white, width: 0.0),
+                                borderRadius: new BorderRadius.circular(10.0),
+                              ),
+                              child: new Center(
+                                child: new Text(
+                                  'Update Trip',
+                                  style: new TextStyle(
+                                      fontSize: 18.0, color: Colors.white),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        onPressed: () {
-                          _submittedTripToDatabase(
-                              trip, tripSnapshot.data.toString());
-                          trip.storeTripType(tripSnapshot.data.toString());
-                          trip.updateEachTrip(
-                              tripData(trip, tripSnapshot.data.toString()));
-                        },
-                      ),
-                    ]),
+                            onPressed: () {
+                              _submittedTripToDatabase(trip,
+                                  tripSnapshot.data.toString(), tripSnap.data);
+                              trip.storeTripType(tripSnapshot.data.toString());
+                            },
+                          );
+                        } else {
+                          return Text(' ');
+                        }
+                      },
+                    );
+                  }),
+                ]),
               ]);
             });
       }),
@@ -252,7 +262,7 @@ class UpdateTripHome extends StatelessWidget {
     );
   }
 
-  TripModel tripData(TripNotifier tripNotifier, String string) {
+  TripModel tripData(TripNotifier tripNotifier, String string, int id) {
     // Text retrieve from user for storage
     String departure;
     String depDate;
@@ -261,8 +271,9 @@ class UpdateTripHome extends StatelessWidget {
     String destDate;
     String destTime;
     String tripTypeItem;
-
+    int updateId;
     tripTypeItem = string;
+    updateId = id;
 
     departure = departController.text;
     depDate = depDateController.text;
@@ -270,10 +281,9 @@ class UpdateTripHome extends StatelessWidget {
     destination = destController.text;
     destDate = destDateController.text;
     destTime = destTimeController.text;
-    int id;
 
     final dataList = new TripModel(
-        id: id,
+        id: updateId,
         departure: departure,
         depDate: depDate,
         depTime: depTime,
@@ -294,7 +304,8 @@ class UpdateTripHome extends StatelessWidget {
     destController.clear();
   }
 
-  void _submittedTripToDatabase(TripNotifier tripNotifier, String string) {
+  void _submittedTripToDatabase(
+      TripNotifier tripNotifier, String string, int id) {
     if (departTimeController.text.isEmpty ||
         depDateController.text.isEmpty ||
         departTimeController.text.isEmpty ||
@@ -303,7 +314,7 @@ class UpdateTripHome extends StatelessWidget {
         destTimeController.text.isEmpty == null) {
       print('Please insert missing info');
     } else {
-      tripNotifier.insertTrip(tripData(tripNotifier, string));
+      tripNotifier.updateEachTrip(tripData(tripNotifier, string, id));
       _handTextSubmitted();
     }
   }

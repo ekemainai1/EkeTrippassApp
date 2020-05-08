@@ -8,17 +8,6 @@ class TripModel {
   String arriDate;
   String arriTime;
 
-  static final columns = [
-    "id",
-    "departure",
-    "depDate",
-    "depTime",
-    "tripType",
-    "arrival",
-    "arriDate",
-    "arriTime"
-  ];
-
   TripModel(
       {this.id,
       this.departure,
@@ -30,6 +19,7 @@ class TripModel {
       this.arriTime});
 
   factory TripModel.fromMap(Map<String, dynamic> data) => new TripModel(
+      id: data["id"],
       departure: data["departure"],
       depDate: data["depDate"],
       depTime: data["depTime"],
@@ -53,6 +43,7 @@ class TripModel {
 
   Map<String, dynamic> toMapWithoutId() {
     final map = new Map<String, dynamic>();
+    map['id'] = id;
     map['departure'] = departure;
     map['depDate'] = depDate;
     map['depTime'] = depTime;

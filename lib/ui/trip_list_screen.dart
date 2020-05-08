@@ -73,9 +73,10 @@ class TripListScreen extends StatelessWidget {
                             String stringType;
                             TripModel strip = tripSnapshot.data[index];
                             stringType = strip.tripType;
-                            int storeId;
-                            storeId = strip.id;
-
+                            int id;
+                            TripModel stripMat = tripSnapshot.data[index];
+                            id = stripMat.id;
+                            print("Am I Holding Value: $id");
                             return GestureDetector(
                                 child: Column(
                                   children: <Widget>[
@@ -94,7 +95,7 @@ class TripListScreen extends StatelessWidget {
                                                     stringType,
                                                     myModel,
                                                     tripSnap.data,
-                                                    index);
+                                                    id);
                                               } else {
                                                 return Text(
                                                     "Awaiting result ...");
@@ -112,7 +113,8 @@ class TripListScreen extends StatelessWidget {
                                   ],
                                 ),
                                 onTap: () {
-                                  trip.storeDeleteId(index);
+                                  trip.storeDeleteId(
+                                      tripSnapshot.data[index].id);
                                   Scaffold.of(context).showSnackBar(SnackBar(
                                       content: Text(index.toString())));
                                 });
@@ -407,7 +409,7 @@ class TripListScreen extends StatelessWidget {
                       ),
                       GestureDetector(
                         onTap: () {
-                          tripNotifier.deleteEachTrip(index);
+                          tripNotifier.deleteEachTrip(id);
                           Navigator.pop(context);
                         },
                         child: Container(

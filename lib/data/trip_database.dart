@@ -130,13 +130,13 @@ class TripDatabase {
   updateTrip(TripModel tripModel) async {
     final db = await database;
     var result = await db.update(table, tripModel.toMap(),
-        where: "id = ?", whereArgs: [tripModel.id]);
+        where: 'id = ?', whereArgs: [tripModel.id]);
     return result;
   }
 
-  deleteTrip(int id) async {
+  Future<int> deleteTrip(int id) async {
     final db = await database;
-    db.delete(table, where: "id = ?", whereArgs: [id]);
+    return db.delete(table, where: "id = ?", whereArgs: [id]);
   }
 
   databaseClosure() async {

@@ -53,14 +53,14 @@ class TripNotifier extends ChangeNotifier {
   String getDropDownButtonState(String dropValue) {
     String tripType = "Business";
     List<String> tripTypes = ["Business", "Education", "Health", "Vacation"];
-    if (dropValue == tripTypes[2].toString()) {
+    if (dropValue == tripTypes[1].toString()) {
+      tripType = tripTypes[1].toString();
+    } else if (dropValue == tripTypes[2].toString()) {
       tripType = tripTypes[2].toString();
     } else if (dropValue == tripTypes[3].toString()) {
       tripType = tripTypes[3].toString();
-    } else if (dropValue == tripTypes[4].toString()) {
-      tripType = tripTypes[4].toString();
     } else {
-      tripType = tripTypes[1].toString();
+      tripType = tripTypes[0].toString();
     }
     notifyListeners();
     return tripType;
